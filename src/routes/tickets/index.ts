@@ -40,11 +40,10 @@ router.post("/create-ticket", async (req, res) => {
         quantity,
         eventId: id
       },
-      notification_url: "https://tu-servidor.com/webhook",
+      notification_url: "https://rumbas-maryjo-backend.onrender.com/api/tickets/save-ticket",
     };
     const preference = await new Preference(client);
     const response = await preference.create({ body } as any);
-    console.log("response", response)
     res.json(response)
   } catch (error) {
 
@@ -54,11 +53,12 @@ router.post("/create-ticket", async (req, res) => {
 router.post("/save-ticket", async (req, res) => {
   const { topic } = req.query;
   const id = req.query as unknown as string
+  console.log('entro a /save-ticket');
 
   if (topic === "payment") { // Si la notificación es de tipo pago
       try {
           const paymentResponse = await payment.get({id}); // Consultas el pago en MP
-          console.log(paymentResponse); // Aquí tienes todos los detalles del pago
+          console.log("paymentResponse", paymentResponse); // Aquí tienes todos los detalles del pago
 
           // Procesa la información del pago según tus necesidades
       } catch (error) {
