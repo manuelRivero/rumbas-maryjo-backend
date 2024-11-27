@@ -52,7 +52,7 @@ router.post("/create-ticket", async (req, res) => {
 
 router.post("/save-ticket", async (req, res) => {
   const { topic } = req.query;
-  const id = req.query as unknown as string
+  const id = req.query.id as unknown as string
   console.log('entro a /save-ticket');
 
   if (topic === "payment") { // Si la notificación es de tipo pago
