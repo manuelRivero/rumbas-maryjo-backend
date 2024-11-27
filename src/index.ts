@@ -14,7 +14,7 @@ const port = 5000;
 
 const corsOptions = {
   //To allow requests from client
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "https://rumbas-maryjo.onrender.com"],
   credentials: true,
   exposedHeaders: ["set-cookie"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
