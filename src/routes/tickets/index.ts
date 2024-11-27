@@ -1,11 +1,9 @@
-import { END } from "./../../../node_modules/mongoose/node_modules/mongodb/src/constants";
 import { Router } from "express";
 import { MercadoPagoConfig, Payment, Preference } from "mercadopago";
-import { title } from "process";
 import Events from "../../models/events";
 
 const client = new MercadoPagoConfig({
-  accessToken: "access_token",
+  accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN as string,
   options: { timeout: 5000, idempotencyKey: "abc" },
 });
 const payment = new Payment(client);
@@ -29,8 +27,8 @@ router.post("/create-ticket", async (req, res) => {
       ],
       auto_return: "approved",
       back_urls: {
-        success: "http://localhost:3000/detalle-evento",
-        failure: "http://localhost:3000/detalle-evento",
+        success: "https://rumbas-maryjo.onrender.com/",
+        failure: "https://rumbas-maryjo.onrender.com/",
       },
       payer: {
         email
@@ -45,10 +43,32 @@ router.post("/create-ticket", async (req, res) => {
       notification_url: "https://tu-servidor.com/webhook",
     };
     const preference = await new Preference(client);
-    // const response = await preference.create({ body });
-  } catch (error) {}
+    const response = await preference.create({ body } as any);
+    console.log("response", response)
+    res.json(response)
+  } catch (error) {
 
-  res.json({ ok: true });
+  }
 });
+
+router.post("/save-ticket", async (req, res) => {
+  const { topic } = req.query;
+  const id = req.query as unknown as string
+
+  if (topic === "payment") { // Si la notificación es de tipo pago
+      try {
+          const paymentResponse = await payment.get({id}); // Consultas el pago en MP
+          console.log(paymentResponse); // Aquí tienes todos los detalles del pago
+
+          // Procesa la información del pago según tus necesidades
+      } catch (error) {
+          console.error("Error al consultar el pago:", error);
+      }
+  }
+
+  res.sendStatus(200); // Confirmas recepción de la notificación
+});
+
+
 
 export default router;
