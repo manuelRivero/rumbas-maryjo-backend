@@ -62,7 +62,7 @@ router.post("/save-ticket", async (req, res) => {
         event_id: metadata.event_id,
         quantity: metadata.quantity,
         name: metadata.name,
-        dni: metadata.name,
+        dni: metadata.dni,
         email: metadata.email,
       });
       await newTicket.save();
@@ -70,10 +70,10 @@ router.post("/save-ticket", async (req, res) => {
       // Procesa la información del pago según tus necesidades
     } catch (error) {
       console.error("Error al consultar el pago:", error);
+      res.sendStatus(500);
+
     }
   }
-
-  res.sendStatus(200); // Confirmas recepción de la notificación
 });
 
 export default router;
