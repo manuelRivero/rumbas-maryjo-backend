@@ -58,12 +58,16 @@ router.post("/save-ticket", async (req, res) => {
     // Si la notificación es de tipo pago
     try {
       const { metadata } = await payment.get({ id }); // Consultas el pago en MP
+      const ticketsArray = Array.from({ length: metadata.quantity }, () => ({
+        status: "active", // Todos los tickets inician como "active"
+      }));
       const newTicket = new tickets({
-        event_id: metadata.event_id,
+        eventId: metadata.event_id,
         quantity: metadata.quantity,
         name: metadata.name,
         dni: metadata.dni,
         email: metadata.email,
+        tickets: ticketsArray
       });
       await newTicket.save();
       res.sendStatus(200);
