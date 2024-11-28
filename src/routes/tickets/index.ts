@@ -96,7 +96,7 @@ router.put("/update-ticket/:id", async (req, res) => {
 
   try {
     const result = await tickets.updateOne(
-      { _id: id, "tickets._id": ticketId }, // Busca el documento y el ticket específico
+      { eventId: id, "tickets._id": ticketId }, // Busca el documento y el ticket específico
       {
         $set: {
           "tickets.$[ticket].status": "inactive", // Actualiza solo el ticket con el filtro
@@ -106,9 +106,10 @@ router.put("/update-ticket/:id", async (req, res) => {
         arrayFilters: [
           { "ticket._id": ticketId }, // Filtro para encontrar el ticket correcto
         ],
-      }
+        new: true
+      },
     );
-
+console.log('result', result);
     if (result.modifiedCount === 0) {
        res.status(404).json({
         message: "No se encontró el ticket o ya estaba inactivo",
