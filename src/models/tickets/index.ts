@@ -1,20 +1,22 @@
 import { Schema, model } from "mongoose";
 
-const Ticket= new Schema(
+const Ticket = new Schema(
   {
-    name:{ type: String },
-    dni: {type: String},
-    email:{type:String},
+    name: { type: String },
+    dni: { type: String },
+    email: { type: String },
+    eventId: {
+      type: Schema.Types.ObjectId,
+      ref: "Event",
+      required: true,
+    },
     tickets: [
-        {
-            event: { type: Schema.Types.ObjectId, ref: "Event" },
-            price:{type:String},
-            dateStart:{type: Date},
-            dateEnd:{type: Date},
-        }
-    ]
-},
-    
+      {
+        status: { type: String, enum: ["active", "inactive"], required: true },
+      },
+    ],
+  },
+
   {
     collection: "tickets",
     timestamps: true,
