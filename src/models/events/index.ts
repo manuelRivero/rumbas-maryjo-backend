@@ -9,7 +9,7 @@ const Event= new Schema(
     endTime: {type: String},
     endDate: {type: Date},
     price: {type: Number},
-    address: {type: Number}
+    address: {type: String}
 },
     
   {

@@ -12,7 +12,7 @@ const payment = new Payment(client);
 const router = Router();
 
 router.post("/create-ticket", async (req, res) => {
-  const { email, name, dni, quantity, id } = req.body;
+  const { email, name, dni, quantity, id, phone } = req.body;
 
   try {
     const targetEvent = await Events.findById(id);
@@ -27,8 +27,8 @@ router.post("/create-ticket", async (req, res) => {
       ],
       auto_return: "approved",
       back_urls: {
-        success: "https://rumbas-maryjo.onrender.com/",
-        failure: "https://rumbas-maryjo.onrender.com/",
+        success: "https://rumbas-maryjo.onrender.com/compra-exitosa",
+        failure: "https://rumbas-maryjo.onrender.com/compra-fallida",
       },
       payer: {
         email,
@@ -39,6 +39,7 @@ router.post("/create-ticket", async (req, res) => {
         name,
         quantity,
         eventId: id,
+        phone,
       },
       notification_url:
         "https://rumbas-maryjo-backend.onrender.com/api/tickets/save-ticket",
@@ -67,7 +68,8 @@ router.post("/save-ticket", async (req, res) => {
         name: metadata.name,
         dni: metadata.dni,
         email: metadata.email,
-        tickets: ticketsArray
+        tickets: ticketsArray,
+        phone: metadata.phone,
       });
       await newTicket.save();
       res.sendStatus(200);
